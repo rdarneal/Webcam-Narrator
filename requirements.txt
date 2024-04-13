@@ -1,0 +1,7 @@
+openai==1.16.1
+elevenlabs==1.0.3
+opencv-python==4.9.0.80
+python-dotenv==1.0.1
+ipykernel==6.29.4
+pandas==2.2.1
+yt-dlp==2024.3.10
