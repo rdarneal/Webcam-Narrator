@@ -41,7 +41,9 @@ def encode_image(
         image_to_save = cv2.resize(image, dimensions, interpolation=cv2.INTER_LINEAR)
         cv2.imwrite(save_path, image_to_save)
         _, buffer = cv2.imencode(".jpg", image_to_save)
-        return base64.b64encode(buffer).decode("utf-8")
+        b64img = base64.b64encode(buffer).decode("utf-8")
+        # print(type(b64img), type(buffer))
+        return b64img
     except IOError as e:
         if e.errno != errno.EACCES:
             raise
@@ -105,10 +107,15 @@ def analyze_image(
         {
             "role": "user",
             "content": [
-                {"type": "text", "text": "Describe this image"},
+                {
+                    "type": "text", 
+                    "text": "Describe this image"
+                },
                 {
                     "type": "image_url",
-                    "image_url": f"data:image/jpeg;base64,{base64_image}",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{base64_image}"
+                    },
                 },
             ],
         },
@@ -126,7 +133,7 @@ def analyze_image(
     )
 
     response = openai_client.chat.completions.create(
-        model="gpt-4-vision-preview",
+        model="gpt-4o",
         messages=messages,
         max_tokens=max_tokens,
     )
